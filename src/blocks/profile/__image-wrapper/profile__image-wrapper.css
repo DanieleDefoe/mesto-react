@@ -1,0 +1,19 @@
+.profile__image-wrapper {
+  grid-area: image;
+  position: relative;
+  margin-right: 30px;
+}
+
+.profile__image-wrapper:hover {
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 767px) {
+  .profile__image-wrapper {
+    margin-right: 0;
+  }
+}
+
+.profile__image-wrapper:hover > .profile__avatar-edit {
+  opacity: 1;
+}
