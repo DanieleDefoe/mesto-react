@@ -8,30 +8,19 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
   const [userName, setUserName] = useState('')
   const [userDescription, setUserDescription] = useState('')
   const [userAvatar, setUserAvatar] = useState('')
-  const [userId, setUserId] = useState('')
 
   const [cards, setCards] = useState([])
 
   useEffect(() => {
     Promise.all([api.getUserData(), api.getInitialCards()]).then(
-      ([{ name, about, avatar, _id }, cardsData]) => {
+      ([{ name, about, avatar }, cardsData]) => {
         setUserName(name)
         setUserDescription(about)
         setUserAvatar(avatar)
-        setUserId(_id)
         setCards(cardsData)
       },
     )
   }, [])
-
-  const cardElements = cards.map((cardData) => (
-    <Card
-      {...cardData}
-      key={cardData._id}
-      userId={userId}
-      onCardClick={onCardClick}
-    />
-  ))
 
   return (
     <main className="main">
@@ -63,7 +52,15 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
         ></button>
       </section>
       <section className="elements" aria-label="карточки с местами">
-        {cardElements}
+        {cards.map(({ name, link, likes, _id }) => (
+          <Card
+            name={name}
+            link={link}
+            likes={likes}
+            key={_id}
+            onCardClick={onCardClick}
+          />
+        ))}
       </section>
     </main>
   )

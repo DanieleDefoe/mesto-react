@@ -1,4 +1,12 @@
-function PopupWithForm({ title, name, children, type, isOpen, onClose }) {
+function PopupWithForm({
+  title,
+  name,
+  children,
+  type,
+  isOpen,
+  onClose,
+  buttonText,
+}) {
   return (
     <section className={`popup ${type} ${isOpen ? 'popup_opened' : ''}`}>
       <form
@@ -16,7 +24,7 @@ function PopupWithForm({ title, name, children, type, isOpen, onClose }) {
         <h3 className="popup__title">{title}</h3>
         {children}
         <button type="submit" className="popup__submit">
-          Сохранить
+          {buttonText}
         </button>
       </form>
     </section>

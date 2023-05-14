@@ -14,7 +14,7 @@ function App() {
 
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
 
-  const [selectedCard, setSelectedCard] = useState('')
+  const [selectedCard, setSelectedCard] = useState(null)
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true)
@@ -28,8 +28,8 @@ function App() {
     setIsAddPlacePopupOpen(true)
   }
 
-  function handleCardClick(link) {
-    setSelectedCard(link)
+  function handleCardClick(card) {
+    setSelectedCard(card)
   }
 
   function closeAllPopups() {
@@ -37,7 +37,7 @@ function App() {
     setIsEditProfilePopupOpen(false)
     setIsAddPlacePopupOpen(false)
 
-    setSelectedCard('')
+    setSelectedCard(null)
   }
 
   return (
@@ -58,6 +58,7 @@ function App() {
         name="edit-form"
         type="profile-popup"
         isOpen={isEditProfilePopupOpen}
+        buttonText="Сохранить"
       >
         <fieldset className="popup__inputs">
           <div className="popup__input-container">
@@ -94,6 +95,7 @@ function App() {
         name="add-form"
         type="card-popup"
         isOpen={isAddPlacePopupOpen}
+        buttonText="Создать"
       >
         <fieldset className="popup__inputs">
           <div className="popup__input-container">
@@ -128,6 +130,7 @@ function App() {
         name="avatar-edit-form"
         type="avatar-popup"
         isOpen={isEditAvatarPopupOpen}
+        buttonText="Обновить"
       >
         <div className="popup__input-container">
           <input
@@ -146,32 +149,9 @@ function App() {
         title="Вы уверены?"
         name="remove-form"
         type="delete-popup"
+        buttonText="Да"
       ></PopupWithForm>
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-      <template className="card-template">
-        <article className="card">
-          <img
-            src="<%=require('./images/Vector.svg')%>"
-            alt="Карточка"
-            className="card__image"
-          />
-          <button
-            className="card__remove card__remove_hidden"
-            aria-label="Удалить карточку"
-          ></button>
-          <div className="card__info">
-            <h2 className="card__title"></h2>
-            <div className="card__like-wrapper">
-              <button
-                type="button"
-                className="card__button"
-                aria-label="лайк"
-              ></button>
-              <p className="card__like-count"></p>
-            </div>
-          </div>
-        </article>
-      </template>
     </>
   )
 }
