@@ -1,8 +1,8 @@
-# Описание проекта Местечко на React :bowtie:
+# Описание проекта MESTO на React :bowtie:
 
 ### Mesto-React - это учебный проект, выполненный на React, который представляет собой веб-приложение для просмотра и добавления фотографий мест со всего мира.
 
-### Ссылка на gitHubPages - https://kampel2012.github.io/mesto-react/
+### Ссылка на gitHubPages - https://danieledefoe.github.io/mesto-react/
 
 
 ## Функциональность :point_down:
