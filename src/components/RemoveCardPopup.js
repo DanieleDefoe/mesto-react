@@ -13,8 +13,11 @@ export default function RemoveCardPopup({
   async function handleSubmit(e) {
     e.preventDefault()
     setButtonText('Удаление...')
-    await onRemoveCard(cardToRemove)
-    setButtonText('Да')
+    try {
+      await onRemoveCard(cardToRemove)
+    } finally {
+      setButtonText('Да')
+    }
   }
 
   return (

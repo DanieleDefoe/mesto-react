@@ -6,17 +6,25 @@ export default function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
   const avatarRef = useRef()
   const [buttonText, setButtonText] = useState('Обновить')
   const [avatar, setAvatar] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [isValid, setIsValid] = useState(false)
 
   async function handleSubmit(e) {
     e.preventDefault()
     setButtonText('Обновление...')
-    await onUpdateAvatar({ avatar: avatarRef.current.value })
-    setButtonText('Обновить')
-    setAvatar('')
+    try {
+      await onUpdateAvatar({ avatar: avatarRef.current.value })
+    } finally {
+      setButtonText('Обновить')
+      setAvatar('')
+      setIsValid(false)
+    }
   }
 
   function handleChange(e) {
     setAvatar(e.target.value)
+    setErrorMessage(e.target.validationMessage)
+    setIsValid(e.target.checkValidity())
   }
 
   return (
@@ -28,6 +36,7 @@ export default function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
       isOpen={isOpen}
       buttonText={buttonText}
       onSubmit={handleSubmit}
+      isValid={isValid}
     >
       <div className="popup__input-container">
         <input
@@ -41,7 +50,11 @@ export default function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
           onChange={handleChange}
           required
         />
-        <span className="popup__input-error popup__input-profile-avatar-error"></span>
+        {errorMessage && (
+          <span className="popup__input-error popup__input-profile-avatar-error">
+            {errorMessage}
+          </span>
+        )}
       </div>
     </PopupWithForm>
   )

@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 function PopupWithForm({
   title,
   name,
@@ -7,7 +9,22 @@ function PopupWithForm({
   onClose,
   buttonText,
   onSubmit,
+  isValid,
 }) {
+  useEffect(() => {
+    function closeOnEscape(e) {
+      if (e.key === 'Escape') {
+        onClose()
+      }
+    }
+
+    window.addEventListener('keydown', closeOnEscape)
+
+    return () => {
+      window.removeEventListener('keydown', closeOnEscape)
+    }
+  }, [onClose])
+
   return (
     <section className={`popup ${type} ${isOpen ? 'popup_opened' : ''}`}>
       <form
@@ -25,7 +42,13 @@ function PopupWithForm({
         ></button>
         <h3 className="popup__title">{title}</h3>
         {children}
-        <button type="submit" className="popup__submit">
+        <button
+          type="submit"
+          disabled={isValid === false}
+          className={`popup__submit ${
+            isValid === false ? 'popup__submit_disabled' : ''
+          }`}
+        >
           {buttonText}
         </button>
       </form>

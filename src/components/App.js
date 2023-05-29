@@ -43,8 +43,12 @@ function App() {
     getUserInfo()
 
     async function getCards() {
-      const data = await api.getInitialCards()
-      setCards(data)
+      try {
+        const data = await api.getInitialCards()
+        setCards(data)
+      } catch (error) {
+        console.log(error.message)
+      }
     }
 
     getCards()

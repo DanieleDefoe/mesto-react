@@ -4,7 +4,11 @@ import { useState, useEffect, useContext } from 'react'
 
 export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   const [name, setName] = useState('')
+  const [isNameValid, setIsNameValid] = useState(true)
+  const [nameError, setNameError] = useState('')
   const [description, setDescription] = useState('')
+  const [isDescriptionValid, setIsDescriptionValid] = useState(true)
+  const [descriptionError, setDescriptionError] = useState('')
   const [buttonText, setButtonText] = useState('Сохранить')
   const currentUser = useContext(CurrentUserContext)
 
@@ -15,18 +19,24 @@ export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
 
   function handleNameChange(e) {
     setName(e.target.value)
+    setNameError(e.target.validationMessage)
+    setIsNameValid(e.target.checkValidity())
   }
 
   function handleDescriptionChange(e) {
     setDescription(e.target.value)
+    setDescriptionError(e.target.validationMessage)
+    setIsDescriptionValid(e.target.checkValidity())
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     setButtonText('Сохранение...')
-    onUpdateUser({ title: name, description }).then(() =>
-      setButtonText('Сохранить'),
-    )
+    try {
+      await onUpdateUser({ title: name, description })
+    } finally {
+      setButtonText('Сохранить')
+    }
   }
 
   return (
@@ -38,6 +48,7 @@ export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       isOpen={isOpen}
       buttonText={buttonText}
       onSubmit={handleSubmit}
+      isValid={isNameValid && isDescriptionValid}
     >
       <fieldset className="popup__inputs">
         <div className="popup__input-container">
@@ -50,10 +61,14 @@ export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
             required
             minLength="2"
             maxLength="40"
-            value={name}
+            value={name || ''}
             onChange={handleNameChange}
           />
-          <span className="popup__input-error popup__input-title-error"></span>
+          {nameError && (
+            <span className="popup__input-error popup__input-title-error">
+              {nameError}
+            </span>
+          )}
         </div>
         <div className="popup__input-container">
           <input
@@ -65,10 +80,14 @@ export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
             required
             minLength="2"
             maxLength="200"
-            value={description}
+            value={description || ''}
             onChange={handleDescriptionChange}
           />
-          <span className="popup__input-error popup__input-description-error"></span>
+          {descriptionError && (
+            <span className="popup__input-error popup__input-description-error">
+              {descriptionError}
+            </span>
+          )}
         </div>
       </fieldset>
     </PopupWithForm>
