@@ -1,21 +1,40 @@
 import PopupWithForm from './PopupWithForm'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 
 export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
-  const nameRef = useRef()
-  const linkRef = useRef()
+  const [name, setName] = useState('')
+  const [isNameValid, setIsNameValid] = useState(false)
+  const [nameError, setNameError] = useState('')
+  const [link, setLink] = useState('')
+  const [isLinkValid, setIsLinkValid] = useState(false)
+  const [linkError, setLinkError] = useState('')
   const [buttonText, setButtonText] = useState('Создать')
+
+  function handleNameChange(e) {
+    setName(e.target.value)
+    setIsNameValid(e.target.checkValidity())
+    setNameError(e.target.validationMessage)
+  }
+
+  function handleLinkChange(e) {
+    setLink(e.target.value)
+    setIsLinkValid(e.target.checkValidity())
+    setLinkError(e.target.validationMessage)
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
     setButtonText('Создание...')
-    const name = nameRef.current.value
-    const link = linkRef.current.value
-    await onAddPlace(name, link)
-    nameRef.current.value = ''
-    linkRef.current.value = ''
-    setButtonText('Создать')
+    try {
+      await onAddPlace(name, link)
+    } finally {
+      setButtonText('Создать')
+    }
+    setName('')
+    setLink('')
+    setIsNameValid(false)
+    setIsLinkValid(false)
   }
 
   return (
@@ -27,6 +46,7 @@ export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       isOpen={isOpen}
       buttonText={buttonText}
       onSubmit={handleSubmit}
+      isValid={isNameValid && isLinkValid}
     >
       <fieldset className="popup__inputs">
         <div className="popup__input-container">
@@ -39,9 +59,14 @@ export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
             required
             minLength="2"
             maxLength="30"
-            ref={nameRef}
+            value={name}
+            onChange={handleNameChange}
           />
-          <span className="popup__input-error popup__input-place-title-error"></span>
+          {nameError && (
+            <span className="popup__input-error popup__input-place-title-error">
+              {nameError}
+            </span>
+          )}
         </div>
         <div className="popup__input-container">
           <input
@@ -51,9 +76,14 @@ export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
             id="place-photo"
             placeholder="Ссылка на картинку"
             required
-            ref={linkRef}
+            value={link}
+            onChange={handleLinkChange}
           />
-          <span className="popup__input-error popup__input-place-photo-error"></span>
+          {linkError && (
+            <span className="popup__input-error popup__input-place-photo-error">
+              {linkError}
+            </span>
+          )}
         </div>
       </fieldset>
     </PopupWithForm>
