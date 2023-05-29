@@ -6,6 +6,7 @@ function PopupWithForm({
   isOpen,
   onClose,
   buttonText,
+  onSubmit,
 }) {
   return (
     <section className={`popup ${type} ${isOpen ? 'popup_opened' : ''}`}>
@@ -13,6 +14,7 @@ function PopupWithForm({
         className="popup__container"
         id={`popup__${name}`}
         name={name}
+        onSubmit={onSubmit}
         noValidate
       >
         <button
