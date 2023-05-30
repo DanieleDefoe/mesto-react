@@ -78,17 +78,19 @@ function App() {
   async function handleCardLike(card) {
     const isLiked = card.likes.some((el) => el._id === currentUser._id)
 
-    let newCard
-
-    if (isLiked) {
-      newCard = await api.unlikeCard(card._id)
-    } else {
-      newCard = await api.likeCard(card._id)
+    try {
+      let newCard
+      if (isLiked) {
+        newCard = await api.unlikeCard(card._id)
+      } else {
+        newCard = await api.likeCard(card._id)
+      }
+      setCards((prevCards) =>
+        prevCards.map((el) => (el._id === card._id ? newCard : el)),
+      )
+    } catch (error) {
+      console.log(error)
     }
-
-    setCards((prevCards) =>
-      prevCards.map((el) => (el._id === card._id ? newCard : el)),
-    )
   }
 
   async function handleCardDelete(card) {
